@@ -16,7 +16,7 @@ use tungstenite::stream::MaybeTlsStream;
 use tungstenite::handshake::client::Response;
 
 #[allow(clippy::all)]
-enum WebsocketAPI {
+pub enum WebsocketAPI {
     Default,
     MultiStream,
     Custom(String),
