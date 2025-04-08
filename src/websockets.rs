@@ -54,7 +54,7 @@ pub enum WebsocketEvent {
 
 pub struct WebSockets<'a> {
     pub socket: Option<(WebSocket<MaybeTlsStream<TcpStream>>, Response)>,
-    handler: Box<dyn FnMut(WebsocketEvent) -> Result<()> + 'a>,
+    handler: Box<dyn FnMut(WebsocketEvent) -> Result<()> + 'a + Send + Sync>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -78,7 +78,7 @@ enum Events {
 impl<'a> WebSockets<'a> {
     pub fn new<Callback>(handler: Callback) -> WebSockets<'a>
     where
-        Callback: FnMut(WebsocketEvent) -> Result<()> + 'a,
+        Callback: FnMut(WebsocketEvent) -> Result<()> + 'a + Send + Sync,
     {
         WebSockets {
             socket: None,
@@ -98,7 +98,7 @@ impl<'a> WebSockets<'a> {
         self.connect_wss(&WebsocketAPI::MultiStream.params(&endpoints.join("/")))
     }
 
-    fn connect_wss(&mut self, wss: &str) -> Result<()> {
+    pub fn connect_wss(&mut self, wss: &str) -> Result<()> {
         let url = Url::parse(wss)?;
         match connect(url) {
             Ok(answer) => {
