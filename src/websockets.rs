@@ -23,7 +23,7 @@ pub enum WebsocketAPI {
 }
 
 impl WebsocketAPI {
-    fn params(self, subscription: &str) -> String {
+    pub fn params(self, subscription: &str) -> String {
         match self {
             WebsocketAPI::Default => format!("wss://stream.binance.com/ws/{}", subscription),
             WebsocketAPI::MultiStream => {
