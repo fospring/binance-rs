@@ -98,7 +98,7 @@ impl<'a> WebSockets<'a> {
         self.connect_wss(&WebsocketAPI::MultiStream.params(&endpoints.join("/")))
     }
 
-    fn connect_wss(&mut self, wss: &str) -> Result<()> {
+    pub fn connect_wss(&mut self, wss: &str) -> Result<()> {
         let url = Url::parse(wss)?;
         match connect(url) {
             Ok(answer) => {
